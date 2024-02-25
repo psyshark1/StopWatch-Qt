@@ -20,7 +20,7 @@ public:
 
 private slots:
     void on_pb_StartStop_clicked();
-    void RecieveTime(const quint32& time);
+    void RecieveTime(const QString& hh,const QString& mm,const QString& ss,const QString& dss);
     void on_pb_Round_clicked();
     void on_pb_Clear_clicked();
 
@@ -38,13 +38,11 @@ private:
     static constexpr char msg_Round[10]{"Круг "};
     static constexpr char msg_RoundTime[15]{", время: "};
     static constexpr char msg_RoundSec[8]{" сек"};
-    quint16 hh{0};
-    quint16 mm{0};
-    quint16 ss{0};
+
     quint8 rounds{0};
     quint32 roundTime{0};
     QString roundText{""};
-    void GetRoundTime(const quint32 &time);
-    void SetTimeValues() noexcept;
+    void GetRoundTime(const QString& ss);
+    void SetTimeValues(const QString& hh,const QString& mm,const QString& ss,const QString& dss) noexcept;
 };
 #endif // MAINWINDOW_H

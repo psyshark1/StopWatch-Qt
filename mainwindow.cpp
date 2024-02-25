@@ -30,46 +30,32 @@ void MainWindow::on_pb_StartStop_clicked()
     }
 }
 
-void MainWindow::RecieveTime(const quint32 &time)
+void MainWindow::RecieveTime(const QString& hh,const QString& mm,const QString& ss,const QString& dss)
 {
-    if(!(time % 36000))
-    {
-        mm = 0; ss = 0; ++hh;
-    }
-    else if(!(time % 600))
-    {
-        ss = 0; ++mm;
-    }
-    else if (!(time % 10))
-    {
-        ++ss;
-    }
-
-    ui->lb_decseconds->setText(QString::number(time % 10));
-
-    SetTimeValues();
+    SetTimeValues(hh, mm, ss, dss);
 
     if ((boolFlags >> 1) & 1)
     {
-        GetRoundTime(time);
+        GetRoundTime(ss);
         boolFlags = boolFlags & (~(1 << 1));
     }
 }
 
-void MainWindow::GetRoundTime(const quint32 &time)
+void MainWindow::GetRoundTime(const QString& ss)
 {
     ++rounds;
-    roundText.append(msg_Round).append(QString::number(rounds)).append(msg_RoundTime).append(QString::number((time / 10) - roundTime)).append(msg_RoundSec);
+    roundText.append(msg_Round).append(QString::number(rounds)).append(msg_RoundTime).append(QString::number(ss.toUInt() - roundTime)).append(msg_RoundSec);
     ui->textBrowser->append(roundText);
-    roundTime = time / 10;
+    roundTime = ss.toUInt();
     roundText.clear();
 }
 
-void MainWindow::SetTimeValues() noexcept
+void MainWindow::SetTimeValues(const QString& hh,const QString& mm,const QString& ss,const QString& dss) noexcept
 {
-    ui->lb_seconds->setText(QString::number(ss));
-    ui->lb_minutes->setText(QString::number(mm));
-    ui->lb_hours->setText(QString::number(hh));
+    ui->lb_decseconds->setText(dss);
+    ui->lb_seconds->setText(ss);
+    ui->lb_minutes->setText(mm);
+    ui->lb_hours->setText(hh);
 }
 
 void MainWindow::on_pb_Round_clicked()
@@ -79,9 +65,8 @@ void MainWindow::on_pb_Round_clicked()
 
 void MainWindow::on_pb_Clear_clicked()
 {
-    mm = 0; ss = 0; hh=0; rounds=0; roundTime=0;
-    ui->lb_decseconds->setText("0");
-    SetTimeValues();
+    rounds=0; roundTime=0;
+    SetTimeValues("0","0","0","0");
     ui->textBrowser->clear();
     emit sig_ClearTimer();
 }

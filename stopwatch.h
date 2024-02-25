@@ -13,6 +13,9 @@ public:
     ~Stopwatch();
 private:
     quint32 tm{0};
+    quint16 hh{0};
+    quint16 mm{0};
+    quint16 ss{0};
 
 public slots:
     void GetTime();
@@ -20,7 +23,7 @@ public slots:
     void stop();
     void clear();
 signals:
-    void sig_sendTime(const quint32& tm);
+    void sig_sendTime(const QString& hh,const QString& mm,const QString& ss,const QString& dss);
 };
 
 #endif // STOPWATCH_H
